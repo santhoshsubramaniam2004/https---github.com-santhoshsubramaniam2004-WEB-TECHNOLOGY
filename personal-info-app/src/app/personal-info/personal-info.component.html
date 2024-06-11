@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Details Form</title>
+  <style>
+    /* Redesigned Form Styles */
+
+    .form-container {
+      max-width: 500px;
+      margin: auto;
+      padding: 30px;
+      background-color: #ffffff;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333333;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 15px;
+      font-size: 16px;
+      border: 2px solid #dddddd;
+      border-radius: 8px;
+      box-sizing: border-box;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+
+    .btn {
+      padding: 15px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: #ffffff;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+
+    .btn:hover {
+      background-color: #0056b3;
+    }
+
+    .result-container {
+      margin-top: 30px;
+      padding: 30px;
+      background-color: #f9f9f9;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .result-container h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: #333333;
+    }
+
+    .result-container p {
+      margin: 10px 0;
+      font-size: 18px;
+      color: #555555;
+    }
+
+    .text-danger {
+      font-size: 14px;
+      color: #d9534f;
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-container">
+  <h1 class="custom-form-title">Enter Your Personal Details</h1>
+  <form [formGroup]="personalInfoForm" (ngSubmit)="onSubmit()" class="custom-form">
+    <div class="custom-form-group">
+      <label for="firstName" class="custom-label">First Name:</label>
+      <input type="text" id="firstName" class="custom-input" formControlName="firstName">
+      <small class="custom-error-message"
+        *ngIf="personalInfoForm.get('firstName')?.invalid && (personalInfoForm.get('firstName')?.dirty || personalInfoForm.get('firstName')?.touched)">
+        <span *ngIf="personalInfoForm.get('firstName')?.errors?.['required']">First Name is required.</span>
+        <span *ngIf="personalInfoForm.get('firstName')?.errors?.['pattern']">Invalid First Name.</span>
+      </small>
+    </div>
+
+    <div class="custom-form-group">
+      <label for="lastName" class="custom-label">Last Name:</label>
+      <input type="text" id="lastName" class="custom-input" formControlName="lastName">
+      <small class="custom-error-message"
+        *ngIf="personalInfoForm.get('lastName')?.invalid && (personalInfoForm.get('lastName')?.dirty || personalInfoForm.get('lastName')?.touched)">
+        <span *ngIf="personalInfoForm.get('lastName')?.errors?.['required']">Last Name is required.</span>
+        <span *ngIf="personalInfoForm.get('lastName')?.errors?.['pattern']">Invalid Last Name.</span>
+      </small>
+    </div>
+
+    <div class="custom-form-group">
+      <label for="dob" class="custom-label">Date of Birth:</label>
+      <input type="date" id="dob" class="custom-input" formControlName="dob">
+      <small class="custom-error-message"
+        *ngIf="personalInfoForm.get('dob')?.invalid && (personalInfoForm.get('dob')?.dirty || personalInfoForm.get('dob')?.touched)">
+        <span *ngIf="personalInfoForm.get('dob')?.errors?.['required']">Date of Birth is required.</span>
+      </small>
+    </div>
+
+    <div class="custom-form-group">
+      <label for="phoneNumber" class="custom-label">Phone Number:</label>
+      <input type="tel" id="phoneNumber" class="custom-input" formControlName="phoneNumber">
+      <small class="custom-error-message"
+        *ngIf="personalInfoForm.get('phoneNumber')?.invalid && (personalInfoForm.get('phoneNumber')?.dirty || personalInfoForm.get('phoneNumber')?.touched)">
+        <span *ngIf="personalInfoForm.get('phoneNumber')?.errors?.['required']">Phone Number is required.</span>
+        <span *ngIf="personalInfoForm.get('phoneNumber')?.errors?.['pattern']">Invalid Phone Number format.</span>
+      </small>
+    </div>
+
+    <div class="custom-form-group">
+      <label for="email" class="custom-label">Email:</label>
+      <input type="email" id="email" class="custom-input" formControlName="email">
+      <small class="custom-error-message"
+        *ngIf="personalInfoForm.get('email')?.invalid && (personalInfoForm.get('email')?.dirty || personalInfoForm.get('email')?.touched)">
+        <span *ngIf="personalInfoForm.get('email')?.errors?.['required']">Email is required.</span>
+        <span *ngIf="personalInfoForm.get('email')?.errors?.['email']">Invalid Email format.</span>
+      </small>
+    </div>
+
+    <div class="custom-form-group">
+      <label for="country" class="custom-label">Country:</label>
+      <select id="country" class="custom-select" formControlName="country">
+        <option *ngFor="let country of countries" [value]="country">{{country}}</option>
+      </select>
+      <small class="custom-error-message"
+        *ngIf="personalInfoForm.get('country')?.invalid && (personalInfoForm.get('country')?.dirty || personalInfoForm.get('country')?.touched)">
+        <span *ngIf="personalInfoForm.get('country')?.errors?.['required']">Country is required.</span>
+      </small>
+    </div>
+
+    <button type="submit" class="custom-submit-btn" [disabled]="personalInfoForm.invalid">Submit</button>
+  </form>
+
+  <div *ngIf="submitted" class="custom-result-container">
+    <h2 class="custom-result-title">Submitted Data</h2>
+    <p><strong>First Name:</strong> {{ personalInfoForm.value.firstName }}</p>
+    <p><strong>Last Name:</strong> {{ personalInfoForm.value.lastName }}</p>
+    <p><strong>Date of Birth:</strong> {{ personalInfoForm.value.dob }}</p>
+    <p><strong>Phone Number:</strong> {{ personalInfoForm.value.phoneNumber }}</p>
+    <p><strong>Email:</strong> {{ personalInfoForm.value.email }}</p>
+    <p><strong>Country:</strong> {{ personalInfoForm.value.country }}</p>
+  </div>
+</div>
+
+</body>
+</html>
